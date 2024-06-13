@@ -1,0 +1,95 @@
+plugins {
+    id 'java-library'
+    id 'java'
+    id 'maven-publish'
+    id 'net.ltgt.errorprone' version '3.0.1'
+    id 'idea'
+    id 'signing'
+}
+
+group "${projectGroup}"
+version "${projectVersion}"
+
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+    withSourcesJar()
+    withJavadocJar()
+}
+
+allprojects {
+    repositories {
+        mavenCentral()
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId = "${projectGroup}"
+            artifactId = "${projectName}"
+            version = "${projectVersion}"
+            from components.java
+
+            pom {
+                name = 'Batch4j'
+                description = 'Simple batch processing library for java'
+                url = 'https://github.com/mawngo/batch4j'
+
+                licenses {
+                    license {
+                        name = 'MIT License'
+                        url = 'https://opensource.org/licenses/MIT'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'mawngo'
+                        name = 'Nguyen Toan'
+                        email = 'sitdownrightnow.dev@gmail.com'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:git:github.com/mawngo/batch4j.git'
+                    developerConnection = 'scm:git:ssh://github.com/mawngo/batch4j.git'
+                    url = 'https://github.com/mawngo/batch4j'
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            def releasesRepoUrl = layout.buildDirectory.dir('repos/releases')
+            def snapshotsRepoUrl = layout.buildDirectory.dir('repos/snapshots')
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+        }
+    }
+}
+
+dependencies {
+    errorprone "com.google.errorprone:error_prone_core:$errorProneVersion"
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.errorprone.disableWarningsInGeneratedCode = true
+    options.errorprone.errorproneArgs = [
+        '-Xep:UnusedMethod:OFF',
+        '-Xep:JavaTimeDefaultTimeZone:OFF'
+    ]
+}
+
+jar {
+    archiveClassifier = ''
+    enabled = true
+}
+
+javadoc {
+    if (JavaVersion.current().isJava9Compatible()) {
+        options.addBooleanOption('html5', true)
+    }
+}
+
+signing {
+    sign publishing.publications.mavenJava
+}

@@ -1,0 +1,29 @@
+*               text=auto eol=lf
+
+*.bat           text eol=crlf
+*.cmd           text eol=crlf
+
+# Java sources
+*.java          text diff=java eol=lf
+*.kt            text diff=java eol=lf
+*.groovy        text diff=java eol=lf
+*.scala         text diff=java eol=lf
+*.gradle        text diff=java eol=lf
+*.gradle.kts    text diff=java eol=lf
+
+# Binary
+*.class         binary
+*.dll           binary
+*.ear           binary
+*.jar           binary
+*.so            binary
+*.war           binary
+*.jks           binary
+*.gz            binary
+
+# Media
+*.png           binary
+*.jpg           binary
+*.ico           binary
+*.jpeg          binary
+*.gif           binary
