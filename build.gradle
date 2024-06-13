@@ -2,7 +2,6 @@ plugins {
     id 'java-library'
     id 'java'
     id 'maven-publish'
-    id 'net.ltgt.errorprone' version '3.0.1'
     id 'idea'
     id 'signing'
 }
@@ -68,15 +67,6 @@ publishing {
 }
 
 dependencies {
-    errorprone "com.google.errorprone:error_prone_core:$errorProneVersion"
-}
-
-tasks.withType(JavaCompile).configureEach {
-    options.errorprone.disableWarningsInGeneratedCode = true
-    options.errorprone.errorproneArgs = [
-        '-Xep:UnusedMethod:OFF',
-        '-Xep:JavaTimeDefaultTimeZone:OFF'
-    ]
 }
 
 jar {
