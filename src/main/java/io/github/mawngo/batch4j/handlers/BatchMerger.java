@@ -67,7 +67,7 @@ public interface BatchMerger<T, B> {
     static <T> BatchMerger<T, Set<T>> mergeToSet(int size) {
         return (buffer, item) -> {
             if (buffer == null) {
-                buffer = size > UNLIMITED ? new HashSet<>(MapUtils.calculateHashMapCapacity(size)) : new HashSet<>();
+                buffer = size > UNLIMITED ? new HashSet<>(MapUtils.newHashSet(size)) : new HashSet<>();
             }
             buffer.add(item);
             return buffer;

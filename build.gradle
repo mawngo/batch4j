@@ -2,6 +2,7 @@ plugins {
     id 'java-library'
     id 'java'
     id 'maven-publish'
+    id 'me.champeau.mrjar' version '0.1'
     id 'idea'
     id 'signing'
 }
@@ -9,9 +10,12 @@ plugins {
 group "${projectGroup}"
 version "${projectVersion}"
 
+multiRelease {
+    targetVersions 8, 11, 21
+}
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_21
     targetCompatibility = JavaVersion.VERSION_1_8
     withSourcesJar()
     withJavadocJar()
