@@ -20,4 +20,24 @@ public interface BatchErrorHandler<T> {
             // Do nothing.
         };
     }
+
+    static <T> BatchErrorHandler<T> retryFrom(BatchHandler<T> handler, int maxRetries) {
+        return (item, count, e) -> {
+            for (int i = 0; i < maxRetries; i++) {
+                try {
+                    handler.accept(item, count);
+                    return;
+                } catch (Throwable ex) {
+                    // continue
+                }
+            }
+            Logging.error("Error processing batch of {} items after {} retries", count, maxRetries, e);
+        };
+    }
+
+    static <T> BatchErrorHandler<T> logging() {
+        return (item, count, e) -> {
+            Logging.error("Error processing batch of {} items", count, e);
+        };
+    }
 }
