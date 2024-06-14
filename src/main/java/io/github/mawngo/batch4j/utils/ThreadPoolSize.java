@@ -1,9 +1,11 @@
 package io.github.mawngo.batch4j.utils;
 
 import java.util.Objects;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
- * Contains thread pool configuration.
+ * Contains thread pool configuration, for create {@link ExecutorService} using {@link ExecutorUtils}
  *
  * @see #parse(String)
  */
@@ -16,22 +18,43 @@ public final class ThreadPoolSize {
         this.maximumPoolSize = maximumPoolSize;
     }
 
+    /**
+     * @return true if the thread pool is dynamic pool
+     * @see ExecutorUtils#newDynamicThreadPool(int, int)
+     */
     public boolean isDynamic() {
         return maximumPoolSize > corePoolSize && corePoolSize >= 0;
     }
 
+    /**
+     * @return true if the thread pool is single
+     * @see Executors#newSingleThreadExecutor()
+     */
     public boolean isSingle() {
         return corePoolSize == 1 && maximumPoolSize == 1;
     }
 
+    /**
+     * Disabled thread pool config will create a {@code null} {@link ExecutorService}
+     *
+     * @return true if the thread pool is disabled
+     */
     public boolean isDisabled() {
         return corePoolSize == 0 && maximumPoolSize == 0;
     }
 
+    /**
+     * @return true if the thread pool is cached
+     * @see Executors#newCachedThreadPool()
+     */
     public boolean isCached() {
         return corePoolSize == -1 && maximumPoolSize == -1;
     }
 
+    /**
+     * @return return true if the thread pool is fixed
+     * @see Executors#newFixedThreadPool(int)
+     */
     public boolean isFixed() {
         return corePoolSize == maximumPoolSize && corePoolSize > 1;
     }
@@ -44,18 +67,30 @@ public final class ThreadPoolSize {
         return maximumPoolSize;
     }
 
+    /**
+     * Create a thread pool config.
+     */
     public static ThreadPoolSize of(int corePoolSize, int maximumPoolSize) {
         return new ThreadPoolSize(corePoolSize, maximumPoolSize);
     }
 
+    /**
+     * Create a cached thread pool config.
+     */
     public static ThreadPoolSize ofCached() {
         return new ThreadPoolSize(-1, -1);
     }
 
+    /**
+     * Create a fixed thread pool config.
+     */
     public static ThreadPoolSize ofFixed(int size) {
         return new ThreadPoolSize(size, size);
     }
 
+    /**
+     * Create a disabled thread pool.
+     */
     public static ThreadPoolSize disabled() {
         return new ThreadPoolSize(0, 0);
     }

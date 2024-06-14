@@ -5,10 +5,21 @@ import io.github.mawngo.batch4j.annotations.Nullable;
 import java.util.*;
 import java.util.function.Supplier;
 
+/**
+ * Merge item into batch
+ */
 @FunctionalInterface
 public interface BatchMerger<T, B> {
     int UNLIMITED = -1;
 
+    /**
+     * Merge a new item into an existing batch or initializing new batch.
+     *
+     * @param batch the existing batch or null when not initialized.
+     * @param item  item to merge into batch.
+     *
+     * @return the initialized/merged batch.
+     */
     B apply(@Nullable B batch, T item);
 
     /**
@@ -25,7 +36,7 @@ public interface BatchMerger<T, B> {
     }
 
     /**
-     * Create a {@link BatchMerger} that merges into a list.
+     * @return a {@link BatchMerger} that merges into a list.
      */
     static <T> BatchMerger<T, List<T>> mergeToList(Supplier<List<T>> factory) {
         return (buffer, item) -> {
@@ -37,6 +48,9 @@ public interface BatchMerger<T, B> {
         };
     }
 
+    /**
+     * @return a {@link BatchMerger} that merges into a list.
+     */
     static <T> BatchMerger<T, List<T>> mergeToList(int size) {
         return (buffer, item) -> {
             if (buffer == null) {
@@ -47,6 +61,9 @@ public interface BatchMerger<T, B> {
         };
     }
 
+    /**
+     * @return a {@link BatchMerger} that merges into a list.
+     */
     static <T> BatchMerger<T, List<T>> mergeToList() {
         return mergeToList(UNLIMITED);
     }
@@ -64,6 +81,9 @@ public interface BatchMerger<T, B> {
         };
     }
 
+    /**
+     * @return a {@link BatchMerger} that merges into a set.
+     */
     static <T> BatchMerger<T, Set<T>> mergeToSet(int size) {
         return (buffer, item) -> {
             if (buffer == null) {
@@ -74,6 +94,9 @@ public interface BatchMerger<T, B> {
         };
     }
 
+    /**
+     * @return a {@link BatchMerger} that merges into a set.
+     */
     static <T> BatchMerger<T, Set<T>> mergeToSet() {
         return mergeToSet(UNLIMITED);
     }

@@ -4,6 +4,9 @@ import io.github.mawngo.batch4j.annotations.Nullable;
 
 import java.util.concurrent.*;
 
+/**
+ * Utilities to creating and managing {@link ExecutorService}
+ */
 public final class ExecutorUtils {
     private ExecutorUtils() {
     }
