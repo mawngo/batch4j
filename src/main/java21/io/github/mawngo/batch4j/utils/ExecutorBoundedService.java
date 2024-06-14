@@ -9,7 +9,7 @@ import java.util.concurrent.*;
  * <p>
  * Typically used for limiting number of virtual thread.
  */
-public class ExecutorBoundedService implements ExecutorService {
+public final class ExecutorBoundedService implements ExecutorService {
     private final ExecutorService delegate;
 
     private final Semaphore semaphore;
