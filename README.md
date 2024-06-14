@@ -10,7 +10,7 @@ Add library to gradle dependencies.
 
 ```groovy
 dependencies {
-    implementation 'io.github.mawngo:batch4j:0.2.0'
+    implementation 'io.github.mawngo:batch4j:0.3.0'
 }
 ```
 

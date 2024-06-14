@@ -78,7 +78,7 @@ public final class CallerRunBatchingProcessorBuilder<B> {
      * Build the processor. If the {@link #disableIf processor is disabled}, it will return {@link DisabledBatchingProcessor}.
      */
     public <T> WaitingProcessor<T, RunningProcessor<T>> build(BatchMerger<T, B> merger) {
-        if (!disable) {
+        if (disable) {
             return () -> new DisabledBatchingProcessor<T>(handler, merger, errorHandler, null);
         }
         return () -> new CallerRunBatchingProcessor<>(handler, merger, errorHandler, maxItem, maxWaitNanos, blockWhileProcessing, null);
@@ -129,7 +129,7 @@ public final class CallerRunBatchingProcessorBuilder<B> {
          * Build the processor. If the {@link #disableIf processor is disabled}, it will return {@link DisabledBatchingProcessor}.
          */
         public <T> WaitingProcessor<T, ParallelProcessor<T>> build(BatchMerger<T, B> merger) {
-            if (!builder.disable) {
+            if (builder.disable) {
                 return () -> new DisabledBatchingProcessor<T>(builder.handler, merger, builder.errorHandler, executorService);
             }
             return () -> new CallerRunBatchingProcessor<>(builder.handler,

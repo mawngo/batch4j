@@ -89,11 +89,12 @@ public final class BatchingProcessorBuilder<B> {
     /**
      * Build the processor. If the {@link #disableIf processor is disabled}, it will return {@link DisabledBatchingProcessor}.
      */
-    public <T> WaitingProcessor<T, RunningProcessor<T>> build(BatchMerger<T, B> merger) {
-        if (!disable) {
-            return () -> new DisabledBatchingProcessor<T>(handler, merger, errorHandler, null);
+    @SuppressWarnings("unchecked")
+    public <T, P extends RunningProcessor<T>> WaitingProcessor<T, P> build(BatchMerger<T, B> merger) {
+        if (disable) {
+            return () -> (P) new DisabledBatchingProcessor<T>(handler, merger, errorHandler, null);
         }
-        return () -> new BatchingProcessor<>(handler, merger, errorHandler, maxItem, maxWaitNanos, blockWhileProcessing, threadFactory, null);
+        return (WaitingProcessor<T, P>) new BatchingProcessor<>(handler, merger, errorHandler, maxItem, maxWaitNanos, blockWhileProcessing, threadFactory, null);
     }
 
     /**
@@ -140,11 +141,12 @@ public final class BatchingProcessorBuilder<B> {
         /**
          * Build the processor. If the {@link #disableIf processor is disabled}, it will return {@link DisabledBatchingProcessor}.
          */
-        public <T> WaitingProcessor<T, ParallelProcessor<T>> build(BatchMerger<T, B> merger) {
-            if (!builder.disable) {
-                return () -> new DisabledBatchingProcessor<T>(builder.handler, merger, builder.errorHandler, executorService);
+        @SuppressWarnings("unchecked")
+        public <T, P extends ParallelProcessor<T>> WaitingProcessor<T, P> build(BatchMerger<T, B> merger) {
+            if (builder.disable) {
+                return () -> (P) new DisabledBatchingProcessor<T>(builder.handler, merger, builder.errorHandler, executorService);
             }
-            return () -> new BatchingProcessor<>(builder.handler,
+            return (WaitingProcessor<T, P>) new BatchingProcessor<>(builder.handler,
                     merger, builder.errorHandler, builder.maxItem, builder.maxWaitNanos,
                     builder.blockWhileProcessing, builder.threadFactory, executorService);
         }

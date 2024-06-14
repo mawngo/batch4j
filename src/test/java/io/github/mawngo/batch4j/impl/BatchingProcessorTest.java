@@ -28,6 +28,22 @@ class BatchingProcessorTest {
     }
 
     @Test
+    void shouldWaitBatch() throws InterruptedException {
+        final AtomicInteger sum = new AtomicInteger(0);
+        final RunningProcessor<Integer> processor = BatchProcessors
+                .newBuilder((List<Integer> list) -> sum.updateAndGet(i -> i + list.size()))
+                .maxItem(10)
+                .build(BatchMerger.mergeToList())
+                .run();
+        for (int i = 0; i < 9; i++) {
+            processor.put(i);
+        }
+        Assertions.assertEquals(0, sum.get());
+        processor.close();
+        Assertions.assertEquals(9, sum.get());
+    }
+
+    @Test
     void shouldRestartable() throws InterruptedException {
         final AtomicInteger sum = new AtomicInteger(0);
         final WaitingProcessor<Integer, RunningProcessor<Integer>> base = BatchProcessors
