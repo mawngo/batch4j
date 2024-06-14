@@ -205,13 +205,7 @@ public final class BatchingProcessor<T, B> implements RunningProcessor<T>, Paral
         if (batch == null) {
             return true;
         }
-        if (count >= maxItem) {
-            return false;
-        }
-        if (maxWait < 0) {
-            return maxItem > 0;
-        }
-        return (System.nanoTime() - startTimeNanos) < maxWait;
+        return count < maxItem && (maxWait < 0 || (System.nanoTime() - startTimeNanos) < maxWait);
     }
 
     /**

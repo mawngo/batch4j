@@ -101,10 +101,7 @@ public final class CallerRunBatchingProcessor<T, B> implements RunningProcessor<
         if (batch == null) {
             return true;
         }
-        if (softMaxWait < 0) {
-            return maxItem > 0;
-        }
-        return (System.nanoTime() - startTimeNanos) < softMaxWait;
+        return count < maxItem && (softMaxWait < 0 || (System.nanoTime() - startTimeNanos) < softMaxWait);
     }
 
     @SuppressWarnings("LockNotBeforeTry")
