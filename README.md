@@ -1,12 +1,14 @@
 # Batch4j
 
-Batching and concurrent utilities for java.
+Simple batch processing library for java .
 
 ## Installation
 
+Not released yet.
+
 Require java 8+.
 
-Add library to gradle dependencies
+Add library to gradle dependencies.
 
 ```groovy
 dependencies {
