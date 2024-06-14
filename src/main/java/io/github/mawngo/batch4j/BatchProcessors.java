@@ -1,6 +1,7 @@
 package io.github.mawngo.batch4j;
 
 import io.github.mawngo.batch4j.handlers.BatchHandler;
+import io.github.mawngo.batch4j.impl.BatchingProcessorBuilder;
 import io.github.mawngo.batch4j.impl.CallerRunBatchingProcessorBuilder;
 
 import java.util.concurrent.TimeUnit;
@@ -11,6 +12,20 @@ import java.util.function.Consumer;
  */
 public final class BatchProcessors {
     private BatchProcessors() {
+    }
+
+    /**
+     * @see BatchingProcessorBuilder
+     */
+    public static <B> BatchingProcessorBuilder<B> newBuilder(BatchHandler<B> batchHandler) {
+        return new BatchingProcessorBuilder<>(batchHandler);
+    }
+
+    /**
+     * @see BatchingProcessorBuilder
+     */
+    public static <B> BatchingProcessorBuilder<B> newBuilder(Consumer<B> batchHandler) {
+        return new BatchingProcessorBuilder<>(BatchHandler.from(batchHandler));
     }
 
     /**

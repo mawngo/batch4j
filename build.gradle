@@ -92,3 +92,7 @@ signing {
 test {
     useJUnitPlatform()
 }
+
+java21Test {
+    useJUnitPlatform()
+}
