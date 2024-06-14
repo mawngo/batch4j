@@ -99,7 +99,7 @@ public final class BatchingProcessor<T, B> implements RunningProcessor<T>, Paral
     @Nullable
     private final BatchErrorHandler<B> errorHandler;
 
-    protected BatchingProcessor(
+    BatchingProcessor(
             BatchHandler<B> handler,
             BatchMerger<T, B> merger,
             @Nullable BatchErrorHandler<B> onErrorHandler,

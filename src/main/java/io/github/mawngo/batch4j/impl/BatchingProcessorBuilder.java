@@ -31,7 +31,7 @@ public final class BatchingProcessorBuilder<B> {
     /**
      * Enable block while processing
      *
-     * @see BatchingProcessor#blockWhileProcessing
+     * @see BatchingProcessor#processingLock
      */
     public BatchingProcessorBuilder<B> blockWhileProcessing() {
         this.blockWhileProcessing = true;
@@ -61,7 +61,7 @@ public final class BatchingProcessorBuilder<B> {
     /**
      * Configure the maximum wait time before process.
      *
-     * @see BatchingProcessor#softMaxWait
+     * @see BatchingProcessor#maxWait
      */
     public BatchingProcessorBuilder<B> maxWait(long waitingTime, TimeUnit unit) {
         this.maxWaiNanos = unit.toNanos(waitingTime);
