@@ -1,7 +1,5 @@
 package io.github.mawngo.batch4j;
 
-import io.github.mawngo.batch4j.annotations.Nullable;
-
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
@@ -14,7 +12,6 @@ public interface ParallelProcessor<T> extends RunningProcessor<T> {
     /**
      * Get the backing executors in case parallel is enabled.
      */
-    @Nullable
     ExecutorService getExecutor();
 
     /**

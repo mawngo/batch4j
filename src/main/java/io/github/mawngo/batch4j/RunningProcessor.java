@@ -58,20 +58,6 @@ public interface RunningProcessor<T> extends AutoCloseable {
     int approximateSize();
 
     /**
-     * Inserts the specified element into this queue if it is possible to do so immediately without violating capacity restrictions, returning
-     * {@code true} upon success and {@code false} if no space is currently available.
-     *
-     * @param e the element to add
-     *
-     * @return {@code true} if the element was added to this queue, else {@code false}
-     * @throws ClassCastException         if the class of the specified element prevents it from being added to this queue
-     * @throws NullPointerException       if the specified element is null
-     * @throws IllegalArgumentException   if some property of the specified element prevents it from being added to this queue
-     * @throws RejectedExecutionException if the processor is closed and cannot process the item
-     */
-    boolean offer(T e);
-
-    /**
      * Inserts the specified element into this processor, waiting if necessary for space to become available.
      *
      * @param e the element to add
@@ -100,4 +86,7 @@ public interface RunningProcessor<T> extends AutoCloseable {
      * @throws RejectedExecutionException if the processor is closed and cannot process the item
      */
     boolean offer(T e, long timeout, TimeUnit unit) throws InterruptedException;
+
+    @Override
+    void close();
 }

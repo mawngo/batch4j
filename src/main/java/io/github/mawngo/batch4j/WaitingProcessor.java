@@ -5,6 +5,6 @@ package io.github.mawngo.batch4j;
  *
  * @param <T> Type of item in batch
  */
-public interface WaitingProcessor<T> {
-    RunningProcessor<T> run();
+public interface WaitingProcessor<T, P extends RunningProcessor<T>> {
+    P run();
 }

@@ -2,6 +2,7 @@ package io.github.mawngo.batch4j.impl;
 
 import io.github.mawngo.batch4j.ParallelProcessor;
 import io.github.mawngo.batch4j.RunningProcessor;
+import io.github.mawngo.batch4j.WaitingProcessor;
 import io.github.mawngo.batch4j.annotations.Nullable;
 import io.github.mawngo.batch4j.handlers.BatchErrorHandler;
 import io.github.mawngo.batch4j.handlers.BatchHandler;
@@ -16,7 +17,7 @@ import java.util.function.Consumer;
 /**
  * A processor that run directly on callers thread without batching.
  */
-public class DisabledBatchingProcessor<T> implements RunningProcessor<T>, ParallelProcessor<T> {
+public final class DisabledBatchingProcessor<T> implements RunningProcessor<T>, ParallelProcessor<T>, WaitingProcessor<T, DisabledBatchingProcessor<T>> {
     /**
      * Executor service to delegate to
      */
@@ -31,7 +32,7 @@ public class DisabledBatchingProcessor<T> implements RunningProcessor<T>, Parall
             BatchErrorHandler<B> errorHandler,
             ExecutorService executorService) {
         this((T item) -> {
-            final var batch = merger.apply(null, item);
+            final B batch = merger.apply(null, item);
             try {
                 handler.accept(batch, 1);
             } catch (Throwable e) {
@@ -51,6 +52,7 @@ public class DisabledBatchingProcessor<T> implements RunningProcessor<T>, Parall
         this.executorService = executorService;
     }
 
+    @Nullable
     @Override
     public ExecutorService getExecutor() {
         return executorService;
@@ -71,27 +73,21 @@ public class DisabledBatchingProcessor<T> implements RunningProcessor<T>, Parall
         // No-op
     }
 
-    @SuppressWarnings("FutureReturnValueIgnored")
     @Override
-    public boolean offer(T item) {
+    public void put(T item) {
         Objects.requireNonNull(item);
         if (executorService != null) {
             executorService.submit(() -> this.handler.accept(item));
-            return true;
+            return;
         }
-
         this.handler.accept(item);
+    }
+
+    @SuppressWarnings("FutureReturnValueIgnored")
+    @Override
+    public boolean offer(T item, long timeout, TimeUnit unit) {
+        put(item);
         return true;
-    }
-
-    @Override
-    public void put(T e) {
-        offer(e);
-    }
-
-    @Override
-    public boolean offer(T e, long timeout, TimeUnit unit) {
-        return offer(e);
     }
 
     @Override
@@ -105,7 +101,12 @@ public class DisabledBatchingProcessor<T> implements RunningProcessor<T>, Parall
     }
 
     @Override
-    public void close() throws Exception {
+    public void close() {
         // No-op
+    }
+
+    @Override
+    public DisabledBatchingProcessor<T> run() {
+        return this;
     }
 }
