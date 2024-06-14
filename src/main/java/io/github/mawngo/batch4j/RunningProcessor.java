@@ -62,13 +62,26 @@ public interface RunningProcessor<T> extends AutoCloseable {
      *
      * @param e the element to add
      *
+     * @throws RejectedExecutionException if the processor is closed and cannot process the item or if interrupted while waiting
+     */
+    default void put(T e) {
+        try {
+            putInterruptibly(e);
+        } catch (InterruptedException ex) {
+            Thread.currentThread().interrupt();
+            throw new RejectedExecutionException("Interrupted", ex);
+        }
+    }
+
+    /**
+     * Inserts the specified element into this processor, waiting if necessary for space to become available.
+     *
+     * @param e the element to add
+     *
      * @throws InterruptedException       if interrupted while waiting
-     * @throws ClassCastException         if the class of the specified element prevents it from being added to this queue
-     * @throws NullPointerException       if the specified element is null
-     * @throws IllegalArgumentException   if some property of the specified element prevents it from being added to this queue
      * @throws RejectedExecutionException if the processor is closed and cannot process the item
      */
-    void put(T e) throws InterruptedException;
+    void putInterruptibly(T e) throws InterruptedException;
 
 
     /**
@@ -80,9 +93,6 @@ public interface RunningProcessor<T> extends AutoCloseable {
      *
      * @return {@code true} if successful, or {@code false} if the specified waiting time elapses before space is available
      * @throws InterruptedException       if interrupted while waiting
-     * @throws ClassCastException         if the class of the specified element prevents it from being added to this queue
-     * @throws NullPointerException       if the specified element is null
-     * @throws IllegalArgumentException   if some property of the specified element prevents it from being added to this queue
      * @throws RejectedExecutionException if the processor is closed and cannot process the item
      */
     boolean offer(T e, long timeout, TimeUnit unit) throws InterruptedException;

@@ -194,7 +194,7 @@ public final class CallerRunBatchingProcessor<T, B> implements RunningProcessor<
     }
 
     @Override
-    public void put(T e) throws InterruptedException {
+    public void putInterruptibly(T e) throws InterruptedException {
         Objects.requireNonNull(e);
         final ReentrantLock lock = this.lock;
         lock.lockInterruptibly();

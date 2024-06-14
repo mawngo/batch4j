@@ -317,7 +317,7 @@ public final class BatchingProcessor<T, B> implements RunningProcessor<T>, Paral
     }
 
     @Override
-    public void put(T e) throws InterruptedException {
+    public void putInterruptibly(T e) throws InterruptedException {
         Objects.requireNonNull(e);
         final ReentrantLock lock = this.lock;
         lock.lockInterruptibly();

@@ -4,15 +4,13 @@ Simple batch processing library for java .
 
 ## Installation
 
-Not released yet.
-
 Require java 8+.
 
 Add library to gradle dependencies.
 
 ```groovy
 dependencies {
-    implementation 'io.github.mawngo:batch4j:0.1.0'
+    implementation 'io.github.mawngo:batch4j:0.2.0'
 }
 ```
 

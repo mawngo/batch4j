@@ -74,7 +74,7 @@ public final class DisabledBatchingProcessor<T> implements RunningProcessor<T>, 
     }
 
     @Override
-    public void put(T item) {
+    public void putInterruptibly(T item) {
         Objects.requireNonNull(item);
         if (executorService != null) {
             executorService.submit(() -> this.handler.accept(item));
