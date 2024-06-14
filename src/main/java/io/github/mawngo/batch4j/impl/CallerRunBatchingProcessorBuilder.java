@@ -19,7 +19,7 @@ public final class CallerRunBatchingProcessorBuilder<B> {
     private BatchErrorHandler<B> errorHandler;
     private boolean blockWhileProcessing;
     private int maxItem = UNLIMITED;
-    private long maxWaiNanos = UNLIMITED;
+    private long maxWaitNanos = UNLIMITED;
     private boolean disable;
 
     public CallerRunBatchingProcessorBuilder(BatchHandler<B> batchHandler) {
@@ -52,7 +52,7 @@ public final class CallerRunBatchingProcessorBuilder<B> {
      * @see CallerRunBatchingProcessor#softMaxWait
      */
     public CallerRunBatchingProcessorBuilder<B> maxWait(long waitingTime, TimeUnit unit) {
-        this.maxWaiNanos = unit.toNanos(waitingTime);
+        this.maxWaitNanos = unit.toNanos(waitingTime);
         return this;
     }
 
@@ -81,7 +81,7 @@ public final class CallerRunBatchingProcessorBuilder<B> {
         if (!disable) {
             return () -> new DisabledBatchingProcessor<T>(handler, merger, errorHandler, null);
         }
-        return () -> new CallerRunBatchingProcessor<>(handler, merger, errorHandler, maxItem, maxWaiNanos, blockWhileProcessing, null);
+        return () -> new CallerRunBatchingProcessor<>(handler, merger, errorHandler, maxItem, maxWaitNanos, blockWhileProcessing, null);
     }
 
     /**
@@ -133,7 +133,7 @@ public final class CallerRunBatchingProcessorBuilder<B> {
                 return () -> new DisabledBatchingProcessor<T>(builder.handler, merger, builder.errorHandler, executorService);
             }
             return () -> new CallerRunBatchingProcessor<>(builder.handler,
-                    merger, builder.errorHandler, builder.maxItem, builder.maxWaiNanos,
+                    merger, builder.errorHandler, builder.maxItem, builder.maxWaitNanos,
                     builder.blockWhileProcessing, executorService);
         }
     }
