@@ -1,6 +1,6 @@
 # Batch4j
 
-Simple batch processing library for java .
+Simple batch processing library for java.
 
 ## Installation
 
@@ -10,7 +10,7 @@ Add library to gradle dependencies.
 
 ```groovy
 dependencies {
-    implementation 'io.github.mawngo:batch4j:0.3.0'
+    implementation 'io.github.mawngo:batch4j:1.0.0'
 }
 ```
 
@@ -19,12 +19,16 @@ dependencies {
 Example usage:
 
 ```java
-
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import io.github.mawngo.batch4j.BatchProcessors;
+import io.github.mawngo.batch4j.RunningProcessor;
+import io.github.mawngo.batch4j.ParallelProcessor;
+import io.github.mawngo.batch4j.handlers.BatchMerger;
+
 @Test
-void example() throws InterruptedException {
+void example() {
     final AtomicInteger sum = new AtomicInteger(0);
     final RunningProcessor<Integer> processor = BatchProcessors
         .newBuilder((List<Integer> list) -> sum.updateAndGet(i -> i + list.size()))
@@ -40,7 +44,7 @@ void example() throws InterruptedException {
 }
 
 @Test
-void exampleParallel() throws InterruptedException {
+void exampleParallel() {
     final AtomicInteger sum = new AtomicInteger(0);
     final ParallelProcessor<Integer> processor = BatchProcessors
         .newBuilder((List<Integer> list) -> sum.updateAndGet(i -> i + list.size()))
@@ -54,7 +58,7 @@ void exampleParallel() throws InterruptedException {
         processor.put(i);
     }
     processor.close();
-    processor.closeExecutor(); // optional, closing backing executor.
+    processor.closeExecutor();                        // optional, closing backing executor.
     Assertions.assertEquals(1_000_000, sum.get());
 }
 ```
