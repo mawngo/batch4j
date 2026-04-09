@@ -1,12 +1,12 @@
-name: Release GH
+name: Build
 on:
   push:
-    # run only against tags
-    tags:
-      - "*"
+    branches:
+      - "master"
+      - "main"
 
 jobs:
-  release-gh:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -20,12 +20,5 @@ jobs:
           java-version: '21'
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v6
-      - name: Build
+      - name: Build Project
         run: ./gradlew build
-      - name: Publish Release
-        uses: softprops/action-gh-release@v2
-        with:
-          make_latest: true
-          files: |
-            LICENSE
-            build/libs/*
